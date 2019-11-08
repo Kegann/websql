@@ -1,0 +1,8 @@
+Flask==1.1.1
+pyhive
+uwsgi
+Flask-SQLAlchemy
+Flask-Cors
+thrift
+sasl
+thrift_sasl
