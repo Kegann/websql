@@ -11,25 +11,35 @@ export const constantRouterMap = [
     name: "index",
     hidden: false,
     component: Layout,
-    //redirect: '/home',
+    redirect: '/sql',
     children: [{
-      path: '/home',
-      name: 'home',
-      component: () => import('../views/Home.vue')
+      path: '/sql',
+      name: 'sql',
+      component: () => import('../views/Sql.vue')
     }]
   },
   {
-    path: "/about",
-    name: "about",
+    path: "/history",
+    name: "history",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: Layout,
-    redirect: '/about/author',
+    redirect: '/history/sql',
     children: [{
-      path: '/about/author',
-      name: 'author',
-      component: () => import(/* webpackChunkName: "about" */ "../views/About.vue")
+      path: '/history/sql',
+      name: 'history_sql',
+      component: () => import(/* webpackChunkName: "about" */ "../views/History.vue")
+    }]
+  },
+  {
+    path: "/auth",
+    name: "auth",
+    component: Layout,
+    children: [{
+      path: '/auth/login',
+      name: 'login',
+      component: () => import("../views/Auth/Login")
     }]
   }
 ];

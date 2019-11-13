@@ -1,7 +1,8 @@
 #coding=utf-8
 import os
 from pyhive import hive
-from app import create_app
+from app import create_app, db
+from app.models import User
 
 app = create_app(os.getenv("FLASK_CONFIG") or "default")
 
@@ -18,6 +19,18 @@ def query_carbon(sql_line,host="10.17.0.62", port=10000):
     thrift_cursor.execute(sql_line)
     res = thrift_cursor.fetchall()
     return res
+
+def test():
+    db.drop_all()
+    db.create_all()
+    user = User()
+    user.name = 'admin'
+    user.set_password("123456")
+    db.session.add(user)
+    db.session.commit()
+
+#TEST: add user
+test()
 
 if __name__ =="__main__":
     app.run(debug=True, host="0.0.0.0", port=24802)

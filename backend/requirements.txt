@@ -6,3 +6,6 @@ Flask-Cors
 thrift
 sasl
 thrift_sasl
+Flask-HTTPAuth
+MySQL-python==1.2.5
+PyJWT

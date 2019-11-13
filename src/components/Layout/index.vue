@@ -1,8 +1,6 @@
 <template>
 <div id="app-wrapper">
-  <div id="header">
-    <div class="header__desc">WebSql</div>
-  </div>
+  <!-- <div class="header__desc">WebSql</div> -->
   <Nav></Nav>
   <div id="content">
     <div class="content-view">
@@ -33,10 +31,9 @@ export default{
   .header__desc{
     color: black;
     font-size: 32px;
-    line-height: 50px;
+    line-height: 40px;
     text-align: left;
-    padding: 20px 0 20px 200px;
-    font-weight: lighter;
+    padding: 20px 0 20px 20px;
   }
 }
 #app-wrapper {
