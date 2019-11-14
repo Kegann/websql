@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "serve": "vue-cli-service serve --mode dev",
+    "build": "vue-cli-service build --mode dev",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "axios": "^0.19.0",
+    "compression-webpack-plugin": "^3.0.0",
     "core-js": "^3.3.2",
     "element-ui": "^2.12.0",
     "register-service-worker": "^1.6.2",
@@ -25,15 +26,12 @@
     "@vue/cli-plugin-unit-jest": "^4.0.0",
     "@vue/cli-plugin-vuex": "^4.0.0",
     "@vue/cli-service": "^4.0.0",
-    "@vue/eslint-config-prettier": "^5.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-eslint": "^10.0.3",
     "eslint": "^5.16.0",
-    "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-vue": "^5.0.0",
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
-    "prettier": "^1.18.2",
     "vue-template-compiler": "^2.6.10"
   },
   "eslintConfig": {
@@ -42,8 +40,7 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/essential",
-      "@vue/prettier"
+      "plugin:vue/essential"
     ],
     "rules": {},
     "parserOptions": {

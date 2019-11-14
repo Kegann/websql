@@ -16,7 +16,7 @@ axios.interceptors.request.use( config => {
     }
     return config
 }, error => {
-    console.log(error);
+    // console.log(error);
     Promise.reject(error);
 })
 
@@ -31,9 +31,10 @@ axios.interceptors.response.use( response => {
                if (router.currentRoute.path !== '/auth/login') {
                    Message({
                        type: 'warning',
-                       message: error.response.message,
+                       message: error.response.message ? error.response.message : error.response.data.message,
                        duration: 3 * 1000
                    })
+                   store.dispatch('Logout');
                    router.replace({
                        path: '/auth/login',
                        query: { redirect: router.currentRoute.path },
@@ -41,7 +42,7 @@ axios.interceptors.response.use( response => {
                }
         }
     } else {
-        console.log(error)
+        // console.log(error)
     }
     return Promise.reject(error)
 })

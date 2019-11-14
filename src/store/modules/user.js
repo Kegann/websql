@@ -25,6 +25,11 @@ const user = {
             let id = JSON.parse(atob(token.split('.')[1])).user_id;
             commit('SET_NAME', name);
             commit('SET_ID', id)
+        },
+        Logout({commit}) {
+            window.localStorage.setItem('websql-token', null);
+            commit('SET_NAME', null);
+            commit('SET_ID', null);
         }
     }
 }

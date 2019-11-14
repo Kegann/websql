@@ -34,6 +34,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import { Message } from 'element-ui'
+
 export default {
   name: 'Login',
   data() {
@@ -59,6 +62,11 @@ export default {
       loading: false,
     }
   },
+  computed: {
+    ...mapGetters([
+        'userName'
+    ])
+  },
   methods: {
     submitForm(formName) {
         this.$refs[formName].validate((valid) => {
@@ -71,13 +79,18 @@ export default {
                         'password': this.LoginForm.passwd
                     }
                 }).then( (response) => {
-                    console.log("REPONSE: ", response)
+                    Message({
+                        type: 'success',
+                        message: 'Login Succeed!',
+                        duration: 2 * 1000
+                    })
+                    // console.log("REPONSE: ", response)
                     this.loading = false
                     window.localStorage.setItem('websql-token', response.data.token)
                     this.$store.dispatch('SetUserInfo');
                     this.$router.push({ path: '/' });
                 }).catch( (error) => {
-                    console.log("REPONSE: ", error)
+                    // console.log("REPONSE: ", error)
                     this.loading = false;
                     if (error.response != undefined) {
                         if (error.response.status == 401) {
@@ -99,6 +112,13 @@ export default {
         } else {
             this.pwdType = 'password'
         }
+    }
+  },
+  mounted() {
+    // 若已经登录，则重定向到主页面
+    console.log("Username: ", this.userName)
+    if (this.userName) {
+        this.$router.push({ path: '/' });
     }
   }
 }

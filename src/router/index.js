@@ -36,11 +36,20 @@ export const constantRouterMap = [
     path: "/auth",
     name: "auth",
     component: Layout,
-    children: [{
-      path: '/auth/login',
-      name: 'login',
-      component: () => import("../views/Auth/Login")
-    }]
+    children: [
+    {
+        path: '/auth/login',
+        name: 'login',
+        hidden: false,
+        component: () => import("../views/Auth/Login")
+    },
+    {
+        path: '/auth/logout',
+        name: 'logout',
+        hidden: false,
+        component: () => import("../views/Auth/Logout")
+    }
+    ]
   }
 ];
 
