@@ -82,7 +82,7 @@ export default {
                     Message({
                         type: 'success',
                         message: 'Login Succeed!',
-                        duration: 2 * 1000
+                        duration: 1 * 1000
                     })
                     // console.log("REPONSE: ", response)
                     this.loading = false

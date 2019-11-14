@@ -23,13 +23,12 @@
       :data="res.slice((currentPage-1)*pagesize, currentPage*pagesize)"
       border
       style="width:100%"
-      @sort-change='sort_change'
-      >
+      @sort-change='sort_change'>
         <el-table-column v-for="col in header"
-        :prop="col[0]"
-        :label="col[0]"
-        sortable='custom'
-        >
+          :prop="col[0]"
+          :label="col[0]"
+          :key="col[0]"
+          sortable='custom'>
         </el-table-column>
       </el-table>
       <div class="paginator" v-if="res">
@@ -48,6 +47,7 @@
 <script>
 // @ is an alias to /src
 import { mapGetters } from 'vuex'
+import { Message } from 'element-ui'
 
 export default {
   name: "home",
@@ -97,7 +97,12 @@ export default {
             sql_line: this.textarea
         }).then( (response) => {
             //保存成功，弹窗1s
-            console.log("save succeed...")
+            console.log("save succeed...");
+            Message({
+              type: 'success',
+              message: 'save succeed!',
+              duration: 1 * 1000
+            })
         }).catch( (error) => {
             //保存失败，弹窗1s
             console.log("save failed...")

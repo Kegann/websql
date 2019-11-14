@@ -32,7 +32,7 @@ axios.interceptors.response.use( response => {
                    Message({
                        type: 'warning',
                        message: error.response.message ? error.response.message : error.response.data.message,
-                       duration: 3 * 1000
+                       duration: 1 * 1000
                    })
                    store.dispatch('Logout');
                    router.replace({
