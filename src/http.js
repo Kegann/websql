@@ -22,7 +22,13 @@ axios.interceptors.request.use( config => {
 
 // 全局response拦截
 axios.interceptors.response.use( response => {
-    return response
+  console.log("GLOBAL response: ", response)
+  let token = response.data.token;
+  if (token) {
+    console.log("Token changed....")
+    window.localStorage.setItem('websql-token', token);
+  }
+  return response
 }, error => {
     if (error.response) {
         // console.log("ERROR: ", error.response)
