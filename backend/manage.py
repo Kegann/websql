@@ -1,6 +1,10 @@
 #coding=utf-8
 import os
+import jwt
+import time
+from datetime import datetime
 from pyhive import hive
+from flask import current_app, g, jsonify
 from app import create_app, db
 from app.models import User
 
@@ -24,13 +28,45 @@ def query_carbon(sql_line,host="10.17.0.62", port=10000):
 @app.before_first_request
 def create_admin():
     print("First request in ...")
-    db.drop_all()
+    # db.drop_all()
     db.create_all()
     user = User()
     user.name = 'admin'
     user.set_password("123456@E")
+    slave = User()
+    slave.name = 'root'
+    slave.set_password('123456@E')
     db.session.add(user)
+    db.session.add(slave)
     db.session.commit()
+
+@app.after_request
+def after_request(response):
+    resp_json = response.get_json()
+    # print("RESP_JSON: ", resp_json)
+    try:
+        # token = resp_json.get('token')
+        token = g.current_token
+        print("TEST0...", token)
+        payload = jwt.decode(
+            token,
+            current_app.config.get('SECRET_KEY'),
+            algorithm=['HS256']
+        )
+        print("TEST...")
+        exp = payload.get('exp')
+        now = time.mktime(datetime.utcnow().timetuple())
+        print("EXP: {}, NOW: {}...".format(exp, now))
+        # 默认token离过期5min内更新
+        update_period = os.getenv('TOKEN_UPDATE_PERIOD',  5)
+        if now + int(update_period) * 60 >= exp:
+            new_token = g.current_user.get_jwt()
+            resp_json['token'] = new_token
+            return jsonify(resp_json)
+    except Exception as err:
+        print("EXCEPTION: ", err)
+        return response
+    return response
 
 if __name__ =="__main__":
     app.run(debug=True, host="0.0.0.0", port=24802)

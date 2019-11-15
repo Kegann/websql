@@ -26,7 +26,7 @@ class User(db.Model):
     def check_password(self, password):
         return check_password_hash(self.passwd_hash, password)
 
-    def get_jwt(self, expires_in=3600):
+    def get_jwt(self, expires_in=1800):
         '''用户登录后，发放有效的JWT'''
         now = datetime.utcnow()
         payload = {
@@ -34,6 +34,7 @@ class User(db.Model):
             'user_name': self.name,
             'exp': now + timedelta(seconds=expires_in)
         }
+        print("produce: ", payload['exp'])
         return jwt.encode(
             payload,
             current_app.config.get('SECRET_KEY'),

@@ -28,6 +28,7 @@ def verify_password(username, password):
 def verify_token(token):
     print ("\nToken: {}".format(token))
     g.current_user = User.verify_jwt(token) if token else None
+    g.current_token = token
     return g.current_user is not None
 
 @basic_auth.error_handler
@@ -42,4 +43,5 @@ def token_auth_erro():
 @basic_auth.login_required
 def login():
     token = g.current_user.get_jwt()
+    g.current_token = token
     return jsonify({"code": 200, "data": "login succeed!", 'token': token})

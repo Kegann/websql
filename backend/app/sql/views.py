@@ -66,3 +66,4 @@ def get_sqls():
     print("Sqls: ", sql_history)
     return jsonify({"code": 200, "data": "get sqls succeed!", "sqls":
                     sql_history})
+
