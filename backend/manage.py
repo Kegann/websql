@@ -20,17 +20,17 @@ def query_carbon(sql_line,host="10.17.0.62", port=10000):
     res = thrift_cursor.fetchall()
     return res
 
-def test():
+
+@app.before_first_request
+def create_admin():
+    print("First request in ...")
     db.drop_all()
     db.create_all()
     user = User()
     user.name = 'admin'
-    user.set_password("123456")
+    user.set_password("123456@E")
     db.session.add(user)
     db.session.commit()
-
-#TEST: add user
-test()
 
 if __name__ =="__main__":
     app.run(debug=True, host="0.0.0.0", port=24802)
