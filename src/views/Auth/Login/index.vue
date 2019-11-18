@@ -40,10 +40,10 @@ import { Message } from 'element-ui'
 export default {
   name: 'Login',
   data() {
-    return { 
+    return {
       LoginForm: {
-        username: "",
-        passwd: "",
+        username: "admin",
+        passwd: "123456",
         usernameError: null,
         passwdError: null
       },
@@ -88,6 +88,7 @@ export default {
                     this.loading = false
                     window.localStorage.setItem('websql-token', response.data.token)
                     this.$store.dispatch('SetUserInfo');
+                    console.log("GET ROUTE: ", this.$store.state.user.userName)
                     this.$router.push({ path: '/' });
                 }).catch( (error) => {
                     // console.log("REPONSE: ", error)

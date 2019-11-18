@@ -40,13 +40,13 @@ export const constantRouterMap = [
     {
         path: '/auth/login',
         name: 'login',
-        hidden: false,
+        hidden: true,
         component: () => import("../views/Auth/Login")
     },
     {
         path: '/auth/logout',
         name: 'logout',
-        hidden: false,
+        hidden: true,
         component: () => import("../views/Auth/Logout")
     }
     ]

@@ -14,7 +14,8 @@
         <span v-if="item.name" slot="title" class="menu-title">{{item.name}}</span>
       </template>
 
-      <template v-for="child in item.children" v-if="!child.hidden">
+      <!-- <template v-for="child in item.children" v-if="!child.hidden"> -->
+      <template v-for="child in item.children">
         <NavItem :is-nest="true" class="nest-menu"
         v-if="child.children&&child.children.length>0" :item="child"
         :key="child.path" :basePath="resolvePath(child.path)" ></NavItem>
