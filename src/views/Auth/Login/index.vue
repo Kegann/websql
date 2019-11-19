@@ -129,6 +129,7 @@ export default {
 .Login-container{
     height: 100%;
     //background-image: linear-gradient(141deg, #9fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+    background-image: radial-gradient(circle farthest-corner at 75% 95%, #fff, #d6e2ee);
     display: flex;
     justify-content: flex-end;
     &-form {

@@ -1,10 +1,10 @@
 <template>
   <div class="sql-history">
-    <h3>Sql History</h3>
+    <h3>History</h3>
     <div class="sql-history-form">
-        <el-table 
+        <el-table
         v-if="sql_history"
-        :data="sql_history"
+        :data="sql_history.slice((currentPage -1)*pageSize, currentPage*pageSize)"
         border>
             <el-table-column
             prop="sql_line"
@@ -17,6 +17,15 @@
             >
             </el-table-column>
         </el-table>
+        <div class="history-paginator" v-if="total">
+          <el-pagination
+           background
+           layout="prev, pager, next"
+           :total="total"
+           @current-change="current_change"
+            >
+          </el-pagination>
+        </div>
     </div>
   </div>
 </template>
@@ -25,8 +34,16 @@
 export default {
     data() {
         return {
-            sql_history: null
+            sql_history: null,
+            pageSize: 10,
+            currentPage: 1,
+            total: 0,
         }
+    },
+    methods: {
+      current_change(currentPage) {
+        this.currentPage = currentPage;
+      }
     },
     mounted() {
         var path = "/sql/history"
@@ -34,6 +51,7 @@ export default {
             console.log("Get history: ", response);
             if (response.data.sqls.length > 0) {
                 this.sql_history = response.data.sqls
+                this.total = this.sql_history.length;
             }
         })
     }
@@ -41,8 +59,21 @@ export default {
 </script>
 
 <style lang="less">
+.sql-history {
+  padding: 0 15px;
+  background-color: #d7d7d7;
+}
 .sql-history h3 {
     text-align: left;
-    margin: 10px 0;
+    padding: 15px 0;
+    margin-bottom: 15px;
+    background-color: white;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+.history-paginator {
+  margin: 15px -15px;
+  background-color: white;
+  padding-top: 5px;
 }
 </style>

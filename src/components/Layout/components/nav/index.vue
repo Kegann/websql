@@ -84,7 +84,6 @@ a{
 }
 
 .websql-logo{
-  top: 8px;
   align-self: center;
 }
 
