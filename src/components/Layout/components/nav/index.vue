@@ -11,8 +11,8 @@
     <NavItem v-for="route in permission_routers" :key="route.name" :item="route"
     :basePath="route.path"></NavItem>
     <el-dropdown class="websql-avatar">
-      <img src="@/static/websql_user1.svg">
-      <i class="el-icon-caret-bottom"></i>
+      <img src="@/static/websql_user3.svg" width="40" height="40">
+      <div class="inverted-triangle"></div>
       <el-dropdown-menu class="websql-dropdown" slot="dropdown">
         <router-link class="inlineBlock" to="/auth/login">
           <el-dropdown-item>
@@ -67,7 +67,18 @@ a{
   }
 }
 
-.websql-dropdown{
-  width: 40px;
+.websql-avatar{
+  top: 8px;
+  right: 25px;
+}
+
+.inverted-triangle {
+  width: 0;
+  height: 0;
+  position: absolute;
+  right: -15px;
+  top: 30px;
+  border:5px solid;
+  border-color:#ffffff rgb(84, 92, 100) rgb(84, 92, 100) rgb(84, 92, 100);
 }
 </style>
