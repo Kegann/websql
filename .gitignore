@@ -28,5 +28,4 @@ yarn-error.log*
 *.sqlite
 
 #other
-package.json
-package-lock.json
+package*.json

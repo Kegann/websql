@@ -1,13 +1,14 @@
 <template>
 <div class="nav">
   <el-menu
-    background-color="#545c64"
-    text-color="#fff"
-    active-text-color="#ffd04b"
+    background-color="aliceblue"
+    text-color="grey"
+    active-text-color="steelblue"
     :default-active="$route.path"
     mode="horizontal"
     class="nav-menu"
   >
+    <img src="@/static/ew_logo.png" height="40" class="websql-logo">
     <NavItem v-for="route in permission_routers" :key="route.name" :item="route"
     :basePath="route.path"></NavItem>
     <el-dropdown class="websql-avatar">
@@ -50,9 +51,8 @@ export default {
   position: sticky;
   position: -webkit-sticky;
   top: -1px;
-  background-color: black;
-  font-size: 20px;
   z-index: 999;
+  font-weight: bolder;
 }
 a{
   text-decoration: none
@@ -65,6 +65,7 @@ a{
     justify-content: flex-end;
     text-align: center;
   }
+  backgorund-color: steelblue;
 }
 
 .websql-avatar{
@@ -79,6 +80,12 @@ a{
   right: -15px;
   top: 30px;
   border:5px solid;
-  border-color:#ffffff rgb(84, 92, 100) rgb(84, 92, 100) rgb(84, 92, 100);
+  border-color:black aliceblue aliceblue aliceblue;
 }
+
+.websql-logo{
+  top: 8px;
+  align-self: center;
+}
+
 </style>
