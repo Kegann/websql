@@ -13,7 +13,7 @@ app = create_app(os.getenv("FLASK_CONFIG") or "default")
 @app.route("/", methods=['GET'])
 def index():
     res = query_carbon("show tables")
-    print("RES: ", res)
+    # print("RES: ", res)
     return "Hello world"
 
 def query_carbon(sql_line,host="10.17.0.62", port=10000):
@@ -27,15 +27,15 @@ def query_carbon(sql_line,host="10.17.0.62", port=10000):
 
 @app.before_first_request
 def create_admin():
-    print("First request in ...")
+    # print("First request in ...")
     # db.drop_all()
     db.create_all()
     user = User()
     user.name = 'admin'
-    user.set_password("123456@E")
+    user.set_password("123456")
     slave = User()
     slave.name = 'root'
-    slave.set_password('123456@E')
+    slave.set_password('123456')
     db.session.add(user)
     db.session.add(slave)
     db.session.commit()
@@ -47,16 +47,14 @@ def after_request(response):
     try:
         # token = resp_json.get('token')
         token = g.current_token
-        print("TEST0...", token)
         payload = jwt.decode(
             token,
             current_app.config.get('SECRET_KEY'),
             algorithm=['HS256']
         )
-        print("TEST...")
         exp = payload.get('exp')
         now = time.mktime(datetime.utcnow().timetuple())
-        print("EXP: {}, NOW: {}...".format(exp, now))
+        # print("EXP: {}, NOW: {}...".format(exp, now))
         # 默认token离过期5min内更新
         update_period = os.getenv('TOKEN_UPDATE_PERIOD',  5)
         if now + int(update_period) * 60 >= exp:
