@@ -17,7 +17,7 @@ def test():
 
 @basic_auth.verify_password
 def verify_password(username, password):
-    print("USERNAME: {}, PASSWD: {}".format(username, password))
+    # print("USERNAME: {}, PASSWD: {}".format(username, password))
     user = User.query.filter_by(name=username).first()
     if not user:
         return False
@@ -26,7 +26,7 @@ def verify_password(username, password):
 
 @token_auth.verify_token
 def verify_token(token):
-    print ("\nToken: {}".format(token))
+    # print ("\nToken: {}".format(token))
     g.current_user = User.verify_jwt(token) if token else None
     g.current_token = token
     return g.current_user is not None

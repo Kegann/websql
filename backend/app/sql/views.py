@@ -42,13 +42,20 @@ def query():
 @sql_bp.route("/history", methods=['POST'])
 @token_auth.login_required
 def save_sql():
-    sql_line = eval(request.get_data(as_text=True)).get('sql_line')
+    false = False
+    null = None
+    true = True
+    # print("REQUEST: ", request.get_data(as_text=False))
+    req = eval(request.get_data(as_text=True))
+    sql_line = req.get('sql_line')
+    sql_res = str(req.get('sql_res'))
     user_id = g.current_user.id
     # print ("SAVE : ", sql_line, user_id)
     if sql_line:
         sql = Sql()
         sql.content = sql_line
         sql.user_id = user_id
+        sql.res = sql_res
         db.session.add(sql)
         db.session.commit()
         return jsonify({"code": 201, "data": "save succeed!"})
@@ -62,8 +69,13 @@ def get_sqls():
     sqls = Sql.query.filter_by(user_id=user_id).all()
     sql_history = []
     for i in sqls:
-        sql_history.append({"sql_line":i.content, "create_time": i.create_time})
-    print("Sqls: ", sql_history)
+        try:
+            sql_res = eval(i.res)
+            sql_history.append({"sql_line":i.content, "create_time": i.create_time,
+                                "sql_res": sql_res})
+            # print("Sql_RES: ", sql_res, type(sql_res))
+        except Exception as err:
+            print(err)
     return jsonify({"code": 200, "data": "get sqls succeed!", "sqls":
                     sql_history})
 

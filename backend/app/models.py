@@ -11,6 +11,7 @@ class Sql(db.Model):
     content = db.Column(db.Text)
     create_time = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    res = db.Column(db.Text)
 
 class User(db.Model):
     __tablename__ = "users"

@@ -25,6 +25,7 @@ def query_carbon(sql_line,host="10.17.0.62", port=10000):
     return res
 
 
+# 首次请求来时创建表和管理员用户
 @app.before_first_request
 def create_admin():
     # print("First request in ...")
@@ -40,6 +41,7 @@ def create_admin():
     db.session.add(slave)
     db.session.commit()
 
+# 每次请求结束时尝试更新token
 @app.after_request
 def after_request(response):
     resp_json = response.get_json()
