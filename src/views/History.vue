@@ -7,9 +7,13 @@
         :data="sql_history.slice((currentPage -1)*pageSize, currentPage*pageSize)"
         border>
             <el-table-column
-            prop="sql_line"
             label="SQL"
             >
+              <template slot-scope="scope">
+                <span @click="direct_detail(scope.row.sql_line, scope.row.sql_res)" class="history-form-link">
+                  {{scope.row.sql_line}}
+                </span>
+              </template>
             </el-table-column>
             <el-table-column
             prop="create_time"
@@ -38,20 +42,31 @@ export default {
             pageSize: 10,
             currentPage: 1,
             total: 0,
+            sql_res: "",
         }
     },
     methods: {
       current_change(currentPage) {
         this.currentPage = currentPage;
-      }
+      },
+      direct_detail(sqlline,sqlres) {
+        // console.log("Test check...");
+        this.$router.push({path: '/sql'});
+        this.$store.dispatch('ActiveHis', {line: sqlline , res:sqlres}).then( response => {
+        //console.log("AcitveHis succeed..")
+        }).catch( error => {
+          console.log("ActiveHist failed;")
+        })
+      },
     },
     mounted() {
         var path = "/sql/history"
         this.$axios.get(path, {}).then( (response) => {
-            console.log("Get history: ", response);
+            // console.log("Get history: ", response);
             if (response.data.sqls.length > 0) {
-                this.sql_history = response.data.sqls
+                this.sql_history = response.data.sqls;
                 this.total = this.sql_history.length;
+                this.sql_res = response.data.res;
             }
         })
     }
@@ -61,7 +76,7 @@ export default {
 <style lang="less">
 .sql-history {
   padding: 0 15px;
-  background-color: #d7d7d7;
+  background-color: #f5efef;
 }
 .sql-history h3 {
     text-align: left;
@@ -75,5 +90,11 @@ export default {
   margin: 15px -15px;
   background-color: white;
   padding-top: 5px;
+}
+
+.history-form-link:hover {
+  cursor: pointer;
+  color: steelblue;
+  font-weight: bold;
 }
 </style>

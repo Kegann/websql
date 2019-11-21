@@ -61,7 +61,8 @@ export default {
       total: 0,
       pagesize: 10,
       currentPage: 1,
-      loading: false
+      loading: false,
+      res_header: null
     }
   },
   computed: {
@@ -88,24 +89,31 @@ export default {
         this.res = response.data.res.data
         this.header = response.data.res.header
         this.total = this.res.length
+        this.res_header = response.data.res
       })
     },
     save_query() {
         //console.log("SAVE QUERY...")
         var path = "/sql/history"
         this.$axios.post(path, {
-            sql_line: this.textarea
+            sql_line: this.textarea,
+            sql_res: this.res_header
         }).then( (response) => {
             //保存成功，弹窗1s
-            console.log("save succeed...");
+            // console.log("save succeed...");
             Message({
               type: 'success',
               message: 'save succeed!',
               duration: 1 * 1000
             })
         }).catch( (error) => {
-            //保存失败，弹窗1s
-            console.log("save failed...")
+          //保存失败，弹窗1s
+          // console.log("save failed...")
+          Message({
+            type: 'error',
+            message: 'save failed...',
+            duration: 1 * 1000
+          })
         })
     },
     current_change(currentPage) {
@@ -141,6 +149,19 @@ export default {
       this.total = 0
       this.currentPage = 1
     },
+  },
+  mounted() {
+    //console.log("Check...", this.$store.state.history.sql_res)
+    if (this.$store.state.history.active) {
+      this.textarea = this.$store.state.history.sql_line;
+      if (this.$store.state.history.sql_res) {
+        this.res = this.$store.state.history.sql_res.data;
+        this.header = this.$store.state.history.sql_res.header
+      }
+    }
+  },
+  beforeDestroy() {
+    this.$store.dispatch('DeactiveHis');
   }
 };
 </script>
