@@ -1,6 +1,8 @@
 <template>
   <div class="sql-history">
     <h3>History</h3>
+    <div class="loading-container" v-loading='loading' :element-loading-text="loading_txt">
+    </div>
     <div class="sql-history-form">
         <el-table
         v-if="sql_history"
@@ -35,6 +37,8 @@
 </template>
 
 <script>
+import { Message } from 'element-ui'
+
 export default {
     data() {
         return {
@@ -43,6 +47,8 @@ export default {
             currentPage: 1,
             total: 0,
             sql_res: "",
+            loading: false,
+            loading_txt: "",
         }
     },
     methods: {
@@ -61,13 +67,25 @@ export default {
     },
     mounted() {
         var path = "/sql/history"
+        this.loading = true;
+        this.loading_txt = "加载中..."
         this.$axios.get(path, {}).then( (response) => {
             // console.log("Get history: ", response);
+            this.loading = false
+            this.loading_txt = ""
             if (response.data.sqls.length > 0) {
                 this.sql_history = response.data.sqls;
                 this.total = this.sql_history.length;
                 this.sql_res = response.data.res;
             }
+        }).catch( (error) => {
+          this.loading = false;
+          this.loading_txt = ""
+          Message({
+            type: 'error',
+            message: 'Load history failed...',
+            duration: 1 * 1000
+          })
         })
     }
 }

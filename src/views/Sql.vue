@@ -14,9 +14,9 @@
         v-model="textarea">
       </el-input>
     </div>
+    <div class="loading-container" v-loading='loading' :element-loading-text="loading_txt">
+    </div>
     <div class="sql-result"
-    v-loading='loading'
-    element-loading-text="查询中..."
     >
       <el-table
       v-if="res"
@@ -62,12 +62,13 @@ export default {
       pagesize: 10,
       currentPage: 1,
       loading: false,
-      res_header: null
+      res_header: null,
+      loading_txt: "",
     }
   },
   computed: {
     ...mapGetters([
-        'login_reminder' 
+        'login_reminder'
     ])
   },
   methods: {
@@ -80,27 +81,35 @@ export default {
       }
       this.initData()
       this.loading = true
+      this.loading_txt = "查询中..."
       var path = '/sql'
       // console.log("POST: ", this.textarea)
       this.$axios.post(path,{
         sql_line: this.textarea
       }).then( (response) => {
         this.loading = false
+        this.loading_txt = ""
         this.res = response.data.res.data
         this.header = response.data.res.header
         this.total = this.res.length
         this.res_header = response.data.res
+        console.log("LENGTH OF RES_HEADER: ", this.res_header.data.length)
       })
     },
     save_query() {
         //console.log("SAVE QUERY...")
         var path = "/sql/history"
+        this.loading = true
+        this.loading_txt = "保存中..."
+        console.log("LENGTH OF RES_HEADER: ", this.res_header)
         this.$axios.post(path, {
             sql_line: this.textarea,
             sql_res: this.res_header
         }).then( (response) => {
             //保存成功，弹窗1s
             // console.log("save succeed...");
+            this.loading = false;
+            this.loading_txt = "";
             Message({
               type: 'success',
               message: 'save succeed!',
@@ -109,6 +118,8 @@ export default {
         }).catch( (error) => {
           //保存失败，弹窗1s
           // console.log("save failed...")
+          this.loading = false;
+          this.loading_txt = "";
           Message({
             type: 'error',
             message: 'save failed...',
@@ -157,6 +168,7 @@ export default {
       if (this.$store.state.history.sql_res) {
         this.res = this.$store.state.history.sql_res.data;
         this.header = this.$store.state.history.sql_res.header
+        this.total = this.res.length
       }
     }
   },

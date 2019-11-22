@@ -4,8 +4,8 @@ import router from './router'
 import { Message } from 'element-ui'
 
 axios.defaults.baseURL = 'http://10.17.0.65:24802'
-//超时时间60s
-axios.defaults.timeout = 60000
+//超时时间120s
+axios.defaults.timeout = 120000
 
 //全局拦截request,带上token
 axios.interceptors.request.use( config => {
