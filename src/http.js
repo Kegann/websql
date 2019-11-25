@@ -3,7 +3,9 @@ import store from './store'
 import router from './router'
 import { Message } from 'element-ui'
 
-axios.defaults.baseURL = 'http://10.17.0.65:24802'
+// test backend 24812
+// prod backend 24802
+axios.defaults.baseURL = 'http://10.17.0.65:24812'
 //超时时间120s
 axios.defaults.timeout = 120000
 

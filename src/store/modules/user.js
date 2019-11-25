@@ -30,6 +30,10 @@ const user = {
             window.localStorage.setItem('websql-token', null);
             commit('SET_NAME', null);
             commit('SET_ID', null);
+            // 注销时，删掉webStorage中保存的store信息，防止多用户互串信息
+            if (window.localStorage.getItem("store")) {
+              window.localStorage.removeItem("store")
+            }
         }
     }
 }

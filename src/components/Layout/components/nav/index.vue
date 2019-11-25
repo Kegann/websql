@@ -12,7 +12,11 @@
     <NavItem v-for="route in permission_routers" :key="route.name" :item="route"
     :basePath="route.path"></NavItem>
     <el-dropdown class="websql-avatar">
-      <img src="@/static/websql_user3.svg" width="40" height="40">
+      <div class="avatar-wrapper">
+        <span class="avatar-name">{{getName}}</span>
+        <img  src="@/static/websql_user3.svg" width="40" height="40" v-if="loginFlag">
+        <img  src="@/static/login.svg" width="40" height="40" v-else>
+      </div>
       <div class="inverted-triangle"></div>
       <el-dropdown-menu class="websql-dropdown" slot="dropdown">
         <router-link class="inlineBlock" to="/auth/login">
@@ -39,6 +43,20 @@ export default {
     NavItem
   },
   computed: {
+    loginFlag: function() {
+      if (this.$store.state.user.userName) {
+        return true
+      } else {
+        return false
+      }
+    },
+    getName: function() {
+      if (this.$store.state.user.userName) {
+        return this.$store.state.user.userName
+      } else {
+        return "未登录"
+      }
+    },
     ...mapGetters([
     'permission_routers'
   ])
@@ -71,6 +89,11 @@ a{
 .websql-avatar{
   top: 8px;
   right: 25px;
+}
+
+.avatar-name {
+  font-weight: lighter;
+  margin: 10px;
 }
 
 .inverted-triangle {
