@@ -27,27 +27,33 @@ axios.interceptors.response.use( response => {
   console.log("GLOBAL response: ", response)
   let token = response.data.token;
   if (token) {
-    console.log("Token changed....")
+    //console.log("Token changed....")
     window.localStorage.setItem('websql-token', token);
   }
   return response
 }, error => {
     if (error.response) {
-        // console.log("ERROR: ", error.response)
+        console.log("ERROR: ", error.response)
         switch (error.response.status) {
-            case 401:
-               if (router.currentRoute.path !== '/auth/login') {
-                   Message({
-                       type: 'warning',
-                       message: error.response.message ? error.response.message : error.response.data.message,
-                       duration: 1 * 1000
-                   })
-                   store.dispatch('Logout');
-                   router.replace({
-                       path: '/auth/login',
-                       query: { redirect: router.currentRoute.path },
-                   })
-               }
+          case 401:
+            if (router.currentRoute.path !== '/auth/login') {
+                Message({
+                    type: 'warning',
+                    message: error.response.message ? error.response.message : error.response.data.message,
+                    duration: 1 * 1000
+                })
+                store.dispatch('Logout');
+                router.replace({
+                    path: '/auth/login',
+                    query: { redirect: router.currentRoute.path },
+                })
+            }
+            break
+
+          // sql语句执行错误...
+          case 500:
+            //console.log("Catch error...")
+            break
         }
     } else {
         // console.log(error)

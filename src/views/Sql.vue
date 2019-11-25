@@ -40,6 +40,9 @@
         >
         </el-pagination>
       </div>
+      <div class="error-detail" v-if="error_detail">
+        {{error_detail}}
+      </div>
     </div>
   </div>
 </template>
@@ -64,8 +67,8 @@ export default {
       loading: false,
       res_header: null,
       loading_txt: "",
-    }
-  },
+      error_detail: "",
+    } },
   computed: {
     ...mapGetters([
         'login_reminder'
@@ -94,6 +97,17 @@ export default {
         this.total = this.res.length
         this.res_header = response.data.res
         console.log("LENGTH OF RES_HEADER: ", this.res_header.data.length)
+      }).catch( (error) => {
+        this.loading = false;
+        //console.log("error: ", error.response.data.message)
+        if (error.response) {
+          this.error_detail = error.response.data.message;
+        }
+        Message({
+          type: 'error',
+          message: 'query failed...',
+          duration: 1 * 1000
+        })
       })
     },
     save_query() {
@@ -159,6 +173,7 @@ export default {
       this.header = null
       this.total = 0
       this.currentPage = 1
+      this.error_detail = ""
     },
   },
   mounted() {
@@ -190,5 +205,12 @@ export default {
   margin: 10px;
 }
 .sql-button {
+}
+
+.error-detail {
+  border: 1px red solid;
+  border-radius: 5px;
+  text-align: left;
+  padding: 5px;
 }
 </style>
