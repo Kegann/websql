@@ -32,14 +32,18 @@ def query_carbon(sql_line,host="10.17.0.62", port=10000):
 
 @sql_bp.route("/", methods=['POST','GET'])
 def query():
-    sql_line = eval(request.get_data(as_text=True)).get('sql_line')
-    sql_line = sql_line.replace(";", "")
-    # print ("SQL_LINE: ", sql_line.encode('utf-8'))
-    if not sql_line:
-        return jsonify({"res":""})
-    res = query_carbon(sql_line)
-    #print("Response: ", res['data'])
-    return jsonify({"res":res})
+    try:
+        sql_line = eval(request.get_data(as_text=True)).get('sql_line')
+        # sql_line = sql_line.replace(";", "")
+        # print ("SQL_LINE: ", sql_line.encode('utf-8'))
+        if not sql_line:
+            return jsonify({"res":""})
+        res = query_carbon(sql_line)
+        #print("Response: ", res['data'])
+        return jsonify({"res":res})
+    except Exception as err:
+        print ("ERR: ", str(err))
+        return error_response(500, str(err))
 
 @sql_bp.route("/history", methods=['POST'])
 @token_auth.login_required
