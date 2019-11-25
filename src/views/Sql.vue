@@ -106,7 +106,7 @@ export default {
         Message({
           type: 'error',
           message: 'query failed...',
-          duration: 1 * 1000
+          duration: 2 * 1000
         })
       })
     },
@@ -208,9 +208,11 @@ export default {
 }
 
 .error-detail {
-  border: 1px red solid;
+  border: 1px white solid;
   border-radius: 5px;
   text-align: left;
   padding: 5px;
+  color: white;
+  background-color: rgba(244,67,54,.7);
 }
 </style>
