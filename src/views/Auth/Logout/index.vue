@@ -1,4 +1,6 @@
 <template>
+  <div>
+  </div>
 </template>
 
 <script>
@@ -8,6 +10,8 @@ export default{
         }).then(() => {
             this.$store.dispatch('Logout');
             this.$router.push('/auth/login');
+        }).catch((error)=> {
+          this.$router.push('/')
         })
     }
 }
