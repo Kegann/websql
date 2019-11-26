@@ -16,7 +16,7 @@ class Sql(db.Model):
 class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(64))
+    name = db.Column(db.String(64), unique=True)
     passwd_hash = db.Column(db.String(256))
     authority = db.Column(db.Integer)
     sqls = db.relationship('Sql', backref='user', lazy='dynamic')

@@ -28,18 +28,18 @@ def query_carbon(sql_line,host="10.17.0.62", port=10000):
 # 首次请求来时创建表和管理员用户
 @app.before_first_request
 def create_admin():
-    # print("First request in ...")
+    print("First request in ...")
     # db.drop_all()
     db.create_all()
-    user = User()
-    user.name = 'admin'
-    user.set_password("123456")
-    slave = User()
-    slave.name = 'root'
-    slave.set_password('123456')
-    db.session.add(user)
-    db.session.add(slave)
-    db.session.commit()
+    user_exist = User.query.filter_by(name="admin").all()
+    print("USERS: ", user_exist)
+    if not user_exist:
+        print("user_exist: ", user_exist)
+        user = User()
+        user.name = 'admin'
+        user.set_password("123456")
+        db.session.add(user)
+        db.session.commit()
 
 # 每次请求结束时尝试更新token
 @app.after_request
