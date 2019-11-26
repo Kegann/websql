@@ -2,8 +2,15 @@
   <div class="home">
     <div class="sql-header">
       <el-row class="sql-button">
-        <el-button type='primary' @click="post_query" :disabled="loading">Query</el-button>
+        <el-button type='primary' 
+          @click="post_query" 
+          :disabled="loading" 
+          :loading="loading">Query
+        </el-button>
         <el-button @click="save_query" :disabled="loading">Save Sql</el-button>
+        <el-tooltip effect="dark" content="导出csv是已编码格式!" placement="right-end">
+          <el-button @click="export_csv" :disabled="!res">Export csv</el-button>
+        </el-tooltip>
       </el-row>
     </div>
     <div class="sql-content">
@@ -110,12 +117,20 @@ export default {
         })
       })
     },
+    createDownloadClick(content, fileName) {
+      const link = document.createElement("a");
+      link.href = encodeURI(content);
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    },
     save_query() {
         //console.log("SAVE QUERY...")
         var path = "/sql/history"
         this.loading = true
         this.loading_txt = "保存中..."
-        console.log("LENGTH OF RES_HEADER: ", this.res_header)
+        // console.log("LENGTH OF RES_HEADER: ", this.res_header)
         this.$axios.post(path, {
             sql_line: this.textarea,
             sql_res: this.res_header
@@ -140,6 +155,48 @@ export default {
             duration: 1 * 1000
           })
         })
+    },
+    export_csv() {
+      try {
+        let username = this.$store.state.user.userName;
+        if (username) {
+          let timestamp = (new Date()).valueOf().toString();
+          let filename = username + '_' + timestamp
+          let header = [];
+          let obj = [];
+          let csv = "";
+          for (let i=0; i<this.header.length; i++) {
+            header.push(this.header[i][0])
+          }
+          header = header.join(',')
+          csv = header + "\n";
+          for (let j=0; j<this.res.length; j++) {
+            let row=""
+            for (let k in this.res[j]) {
+              // 转义
+              row += escape(this.res[j][k]) + ','
+            }
+            csv = csv + row + "\n";
+          }
+          console.log("obj: ",csv);
+          /**
+          const result = json2csv.parse(obj, {
+            // fields: header,
+            // excelStrings: true
+          });
+          console.log("exporting...", result);
+          **/
+          let csvContent = "data:text/csv;charset=utf-8,\uFEFF" + csv;
+          this.createDownloadClick(csvContent, `${filename}.csv`)
+        }
+      } catch (err) {
+        console.log("err: ", err)
+        Message({
+          type: 'warning',
+          message: err,
+          duration: 1 * 1000
+        })
+      }
     },
     current_change(currentPage) {
       this.currentPage = currentPage;
