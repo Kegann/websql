@@ -34,7 +34,7 @@ def query_carbon(sql_line,host="10.17.0.62", port=10000):
 def query():
     try:
         sql_line = eval(request.get_data(as_text=True)).get('sql_line')
-        # sql_line = sql_line.replace(";", "")
+        sql_line = sql_line.replace(";", "")
         # print ("SQL_LINE: ", sql_line.encode('utf-8'))
         if not sql_line:
             return jsonify({"res":""})
@@ -78,10 +78,22 @@ def get_sqls():
         try:
             sql_res = eval(i.res)
             sql_history.append({"sql_line":i.content, "create_time": i.create_time,
-                                "sql_res": sql_res})
+                                "sql_res": sql_res, "sql_id": i.id})
             # print("Sql_RES: ", sql_res, type(sql_res))
         except Exception as err:
             print(err)
     return jsonify({"code": 200, "data": "get sqls succeed!", "sqls":
                     sql_history})
 
+@sql_bp.route("/history/<int:sql_id>", methods=["DELETE"])
+@token_auth.login_required
+def del_sqls(sql_id):
+    try:
+        sql_drop = Sql.query.filter_by(id=sql_id).first()
+        print(" sql_drop: ", sql_drop);
+        db.session.delete(sql_drop)
+        db.session.commit()
+        return jsonify({"code": 204, "data": "del sqls succeed!"})
+    except Exception as err:
+        print("del_sqls :", str(err))
+    return error_response(500, "delete history failed...")
