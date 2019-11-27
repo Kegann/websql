@@ -22,6 +22,17 @@
             label="创建时间"
             >
             </el-table-column>
+            <el-table-column>
+                <template slot-scope="scope">
+                  <el-button 
+                    size="mini"
+                    type="danger"
+                    round
+                    @click="remove_his(scope.row.sql_id, scope.$index)">
+                    删除
+                  </el-button>
+                </template>
+            </el-table-column>
         </el-table>
         <div class="history-paginator" v-if="total">
           <el-pagination
@@ -64,6 +75,29 @@ export default {
           console.log("ActiveHist failed;")
         })
       },
+      remove_his(sql_id, idx) {
+        var path = "/sql/history/" + sql_id
+        //console.log("REMOVING... ", sql_id, path, idx, this.sql_history)
+        this.loading = true;
+        this.loading_txt = "删除中...";
+        this.$axios.delete(path,{}
+        ).then( (response) => {
+          this.loading = false;
+          Message({
+            type: "success",
+            message: "delete succeed!",
+            duration: 1 * 1000
+          });
+          this.sql_history.splice(idx,1);
+        }).catch( (error) => {
+          this.loading = false;
+          Message({
+            type: "error",
+            message: "delete failed...",
+            duration: 1 * 1000
+          })
+        })
+      }
     },
     mounted() {
         var path = "/sql/history"
