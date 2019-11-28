@@ -20,12 +20,12 @@
       <div class="inverted-triangle"></div>
       <el-dropdown-menu class="websql-dropdown" slot="dropdown">
         <router-link class="inlineBlock" to="/auth/login">
-          <el-dropdown-item>
+          <el-dropdown-item v-if="!loginFlag">
             Login
           </el-dropdown-item>
         </router-link>
         <router-link class="inlineBlock" to="/auth/logout">
-          <el-dropdown-item divided>
+          <el-dropdown-item divided v-if="loginFlag">
             Logout
           </el-dropdown-item>
         </router-link>
