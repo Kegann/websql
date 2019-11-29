@@ -4,6 +4,7 @@ from flask import jsonify, request, g
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 from app.errors import error_response
 from app.models import User
+from app.extensions import db
 
 basic_auth = HTTPBasicAuth()
 token_auth = HTTPTokenAuth()
@@ -45,3 +46,23 @@ def login():
     token = g.current_user.get_jwt()
     g.current_token = token
     return jsonify({"code": 200, "data": "login succeed!", 'token': token})
+
+@auth_bp.route("/user", methods=['POST'])
+def register():
+    try:
+        name = request.get_json().get('user')
+        pwd = request.get_json().get('pwd')
+        if not ( name and pwd ):
+            return error_response(400, "invalid username or passwd...")
+        user = User()
+        user.name = name
+        user.set_password(pwd)
+        db.session.add(user)
+        db.session.commit()
+        token = user.get_jwt()
+        g.current_token = token
+        return jsonify({"code": 201, "data": "register succeed!" ,"token":
+                        token})
+    except Exception as err:
+        return error_response(500, "sth bad happened...")
+    return error_response(500, "sth bad happened...")
