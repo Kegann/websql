@@ -50,12 +50,12 @@ export default {
       LoginFormRules: {
         username: [
             { required: true, message: "请输入用户名", trigger: "blur"},
-            { min: 3, max: 20, message: "请输入3-20个字符的用户名", trigger:
+            { min: 1, max: 20, message: "请输入1-20个字符的用户名", trigger:
             "blur"}
         ],
         passwd: [
         { required: true, message: "请输入密码", trigger: "blur" },
-        { min: 6, message: "密码长度至少需要6个字符", trigger: "blur"}
+        { min: 1, max:20, message: "密码长度为1~20个字符或数字", trigger: "blur"}
         ]
       },
       pwdType: 'password',

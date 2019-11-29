@@ -33,22 +33,28 @@ export const constantRouterMap = [
     }]
   },
   {
-    path: "/auth",
-    name: "auth",
-    component: Layout,
-    hidden: true,
-    children: [
+      path: "/auth",
+      name: "auth",
+      component: Layout,
+      hidden: true,
+      children: [
     {
-        path: '/auth/login',
-        name: 'login',
-        hidden: true,
-        component: () => import("../views/Auth/Login")
+      path: '/auth/login',
+      name: 'login',
+      hidden: true,
+      component: () => import("../views/Auth/Login")
     },
     {
-        path: '/auth/logout',
-        name: 'logout',
-        hidden: true,
-        component: () => import("../views/Auth/Logout")
+      path: '/auth/logout',
+      name: 'logout',
+      hidden: true,
+      component: () => import("../views/Auth/Logout")
+    },
+    {
+      path: '/auth/register',
+      name: 'register',
+      hidden: true,
+      component: () => import("../views/Auth/Register")
     }
     ]
   }
