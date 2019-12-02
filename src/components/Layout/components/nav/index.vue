@@ -25,12 +25,12 @@
           </el-dropdown-item>
         </router-link>
         <router-link class="inlineBlock" to="/auth/register">
-          <el-dropdown-item v-if="!loginFlag">
+          <el-dropdown-item divided v-if="!loginFlag">
             Register
           </el-dropdown-item>
         </router-link>
         <router-link class="inlineBlock" to="/auth/logout">
-          <el-dropdown-item divided v-if="loginFlag">
+          <el-dropdown-item v-if="loginFlag">
             Logout
           </el-dropdown-item>
         </router-link>

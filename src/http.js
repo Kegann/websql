@@ -35,6 +35,11 @@ axios.interceptors.response.use( response => {
     if (error.response) {
         console.log("ERROR: ", error.response)
         switch (error.response.status) {
+          // 请求错误
+          case 400:
+            break
+
+          // 401 用户名，密码或令牌错误
           case 401:
             if (router.currentRoute.path !== '/auth/login') {
                 Message({
@@ -50,7 +55,7 @@ axios.interceptors.response.use( response => {
             }
             break
 
-          // sql语句执行错误...
+          // sql语句执行错误或不可预知的错误
           case 500:
             //console.log("Catch error...")
             break

@@ -51,7 +51,7 @@ import { Message } from 'element-ui'
       submit_form(form) {
         this.$refs[form].validate((valid) => {
           if (valid) {
-            console.log("valid...", form);
+            // console.log("valid...", form);
             var path="/auth/user";
             this.$axios.post(path, {
               user: this.register_form.username,
@@ -64,6 +64,19 @@ import { Message } from 'element-ui'
               });
               this.$store.dispatch('SetUserInfo');
               this.$router.push({ path: '/' });
+            }).catch( (error) => {
+              // 尝试获取后端传来的错误信息
+              if (error.response) {
+                var msg = error.response.data.message
+              } else {
+                var msg = "Register failed..."
+              }
+              Message({
+                type: "error",
+                message: msg,
+                duration: 1 * 1000
+              });
+              // console.log("Register error: ", error.response)
             })
           }
         })
