@@ -21,7 +21,10 @@
         v-model="textarea">
       </el-input>
     </div>
-    <div class="loading-container" v-loading='loading' :element-loading-text="loading_txt">
+    <div class="sql-resbar" v-show="loading">
+      {{timeCnt}}
+    </div>
+    <div class="loading-container" :element-loading-text="loading_txt">
     </div>
     <div class="sql-result"
     >
@@ -73,17 +76,40 @@ export default {
       currentPage: 1,
       loading: false,
       res_header: null,
-      loading_txt: "",
       error_detail: "",
+      cnt: 0,
+      loading_txt: "",
+      interval_id: null,
     } },
   computed: {
+    timeCnt() {
+      return this.switch_time(this.cnt)
+    },
     ...mapGetters([
         'login_reminder'
     ])
   },
   methods: {
+    switch_time(timeStamp) {
+      let h = parseInt(timeStamp / 3600);
+      let hh = parseInt(h/10);
+      let hl = h%10;
+      let m = parseInt((timeStamp % 3600) / 60);
+      let mh = parseInt(m/10);
+      let ml = m%10;
+      let s = timeStamp % 60;
+      let sh = parseInt(s/10);
+      let sl = s%10;
+      let res = `Querying... ${hh}${hl}:${mh}${ml}:${sh}${sl}`;
+      // console.log("RES: ", res);
+      return res
+    },
     //向后端发起请求，查询sql语句
     post_query() {
+      var that = this;
+      this.interval_id = setInterval(function(){
+        that.cnt ++;
+      }, 1000)
       let token = window.localStorage.getItem('websql-token');
       //没有token认为未登录，弹出提示框
       if (!token && this.login_reminder) {
@@ -91,20 +117,31 @@ export default {
       }
       this.initData()
       this.loading = true
-      this.loading_txt = "查询中..."
+      // this.loading_txt = "查询中..."
       var path = '/sql'
       // console.log("POST: ", this.textarea)
       this.$axios.post(path,{
         sql_line: this.textarea
       }).then( (response) => {
+        // 停止计数器
+        if (this.interval_id) {
+          clearInterval(this.interval_id);
+          this.interval_id = null;
+        };
+        this.cnt = 0;
         this.loading = false
         this.loading_txt = ""
         this.res = response.data.res.data
         this.header = response.data.res.header
         this.total = this.res.length
         this.res_header = response.data.res
-        console.log("LENGTH OF RES_HEADER: ", this.res_header.data.length)
+        // console.log("LENGTH OF RES_HEADER: ", this.res_header.data.length)
       }).catch( (error) => {
+        // 停止计数器
+        if (this.interval_id) {
+          clearInterval(this.interval_id);
+          this.interval_id = null;
+        };
         this.loading = false;
         //console.log("error: ", error.response.data.message)
         if (error.response) {
@@ -239,10 +276,10 @@ export default {
       this.textarea = this.$store.state.history.sql_line;
       if (this.$store.state.history.sql_res) {
         this.res = this.$store.state.history.sql_res.data;
-        this.header = this.$store.state.history.sql_res.header
-        this.total = this.res.length
-      }
-    }
+        this.header = this.$store.state.history.sql_res.header;
+        this.total = this.res.length;
+      };
+    };
   },
   beforeDestroy() {
     this.$store.dispatch('DeactiveHis');
@@ -271,5 +308,14 @@ export default {
   padding: 5px;
   color: white;
   background-color: rgba(244,67,54,.7);
+}
+
+.sql-resbar {
+  background-color: rgba(33,150,243,.7);
+  padding: 15px 20px;
+  color: white;
+  text-align: left;
+  border-radius: 3px;
+  font-size: 14px;
 }
 </style>
