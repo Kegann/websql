@@ -54,6 +54,9 @@ def register():
         pwd = request.get_json().get('pwd')
         if not ( name and pwd ):
             return error_response(400, "invalid username or passwd...")
+        user_exist = User.query.filter_by(name=name).first()
+        if user_exist:
+            return error_response(400, "User exist...")
         user = User()
         user.name = name
         user.set_password(pwd)
