@@ -15,7 +15,7 @@ export const constantRouterMap = [
     children: [{
       path: '/sql',
       name: 'SQL',
-      component: () => import('../views/Sql.vue')
+      component: () => import('../views/Sql')
     }]
   },
   {

@@ -21,9 +21,14 @@
         v-model="textarea">
       </el-input>
     </div>
-    <div class="sql-resbar" v-show="loading">
-      {{timeCnt}}
+    <div class="sql-resbar">
+      <img src="@/static/clock0.svg" height="13">
+      <span class="sql-resbar-title">Runtime {{bar_cnt}}</span>
     </div>
+    <div class="sql-cnt" v-show="loading">
+        {{timeCnt}}
+    </div>
+
     <div class="loading-container" :element-loading-text="loading_txt">
     </div>
     <div class="sql-result"
@@ -80,6 +85,7 @@ export default {
       cnt: 0,
       loading_txt: "",
       interval_id: null,
+      bar_cnt: "-"
     } },
   computed: {
     timeCnt() {
@@ -106,6 +112,7 @@ export default {
     },
     //向后端发起请求，查询sql语句
     post_query() {
+      this.bar_cnt = "running..."
       var that = this;
       this.interval_id = setInterval(function(){
         that.cnt ++;
@@ -123,6 +130,7 @@ export default {
       this.$axios.post(path,{
         sql_line: this.textarea
       }).then( (response) => {
+        this.bar_cnt = this.cnt + "s";
         // 停止计数器
         if (this.interval_id) {
           clearInterval(this.interval_id);
@@ -137,6 +145,7 @@ export default {
         this.res_header = response.data.res
         // console.log("LENGTH OF RES_HEADER: ", this.res_header.data.length)
       }).catch( (error) => {
+        this.bar_cnt = "-";
         // 停止计数器
         if (this.interval_id) {
           clearInterval(this.interval_id);
@@ -311,11 +320,27 @@ export default {
 }
 
 .sql-resbar {
+  margin: 10px;
+  padding: 15px 0;
+  text-align: left;
+  color: grey;
+  font-size: small;
+  display: flex;
+  align-items: center;
+  &-title {
+    margin-left: 3px;
+  }
+}
+
+.sql-cnt {
   background-color: rgba(33,150,243,.7);
   padding: 15px 20px;
   color: white;
   text-align: left;
   border-radius: 3px;
   font-size: 14px;
+  img {
+    margin: 10px;
+  }
 }
 </style>
