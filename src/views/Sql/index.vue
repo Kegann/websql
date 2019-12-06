@@ -21,12 +21,7 @@
         v-model="textarea">
       </el-input>
     </div>
-    <div class="sql-resbar">
-      <img src="@/static/clock0.svg" height="13">
-      <span class="sql-resbar-title">Runtime {{bar_cnt}}</span>
-      <img src="@/static/list0.svg" height="13">
-      <span class="sql-resbar-title">Rows {{bar_rows}}</span>
-    </div>
+    <resBar-component v-bind:bar_cnt="bar_cnt" v-bind:bar_rows="bar_rows"></resBar-component>
     <div class="sql-cnt" v-show="loading">
         {{timeCnt}}
     </div>
@@ -68,6 +63,7 @@
 // @ is an alias to /src
 import { mapGetters } from 'vuex'
 import { Message } from 'element-ui'
+import resBar from './components/resbar'
 
 export default {
   name: "home",
@@ -297,6 +293,9 @@ export default {
   },
   beforeDestroy() {
     this.$store.dispatch('DeactiveHis');
+  },
+  components: {
+    'resBar-component': resBar,
   }
 };
 </script>
@@ -324,19 +323,7 @@ export default {
   background-color: rgba(244,67,54,.7);
 }
 
-.sql-resbar {
-  margin: 10px;
-  padding: 15px 0;
-  text-align: left;
-  color: grey;
-  font-size: small;
-  display: flex;
-  align-items: center;
-  &-title {
-    margin-left: 3px;
-    margin-right: 10px;
-  }
-}
+
 
 .sql-cnt {
   background-color: rgba(33,150,243,.7);
