@@ -24,6 +24,8 @@
     <div class="sql-resbar">
       <img src="@/static/clock0.svg" height="13">
       <span class="sql-resbar-title">Runtime {{bar_cnt}}</span>
+      <img src="@/static/list0.svg" height="13">
+      <span class="sql-resbar-title">Rows {{bar_rows}}</span>
     </div>
     <div class="sql-cnt" v-show="loading">
         {{timeCnt}}
@@ -85,7 +87,8 @@ export default {
       cnt: 0,
       loading_txt: "",
       interval_id: null,
-      bar_cnt: "-"
+      bar_cnt: "-",
+      bar_rows: "-",
     } },
   computed: {
     timeCnt() {
@@ -112,7 +115,8 @@ export default {
     },
     //向后端发起请求，查询sql语句
     post_query() {
-      this.bar_cnt = "running..."
+      this.bar_cnt = "running...";
+      this.bar_rows = "-";
       var that = this;
       this.interval_id = setInterval(function(){
         that.cnt ++;
@@ -140,6 +144,7 @@ export default {
         this.loading = false
         this.loading_txt = ""
         this.res = response.data.res.data
+        this.bar_rows = this.res.length;
         this.header = response.data.res.header
         this.total = this.res.length
         this.res_header = response.data.res
@@ -329,6 +334,7 @@ export default {
   align-items: center;
   &-title {
     margin-left: 3px;
+    margin-right: 10px;
   }
 }
 
