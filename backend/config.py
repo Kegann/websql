@@ -9,15 +9,19 @@ class BaseConfig(object):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///' + \
                                              os.path.join(basedir, \
                                                           'data.sqlite'))
-    
+
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
 
 class ProductionConfig(BaseConfig):
     DEBUG = False
 
+class TestConfig(BaseConfig):
+    SQLALCHEMY_DATABASE_URI = ('sqlite:///:memory:')
+
 config = {
     'default': DevelopmentConfig,
     'dev': DevelopmentConfig,
-    'prod': ProductionConfig
+    'prod': ProductionConfig,
+    'test': TestConfig
 }

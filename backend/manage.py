@@ -2,6 +2,7 @@
 import os
 import jwt
 import time
+import click
 from datetime import datetime
 from pyhive import hive
 from flask import current_app, g, jsonify
@@ -9,6 +10,10 @@ from app import create_app, db
 from app.models import User
 
 app = create_app(os.getenv("FLASK_CONFIG") or "default")
+
+@app.cli.command()
+def hello():
+    click.echo('say-hello')
 
 @app.route("/", methods=['GET'])
 def index():
