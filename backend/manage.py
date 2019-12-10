@@ -12,8 +12,11 @@ from app.models import User
 app = create_app(os.getenv("FLASK_CONFIG") or "default")
 
 @app.cli.command()
-def hello():
-    click.echo('say-hello')
+def test():
+    import unittest
+    test = unittest.TestLoader().discover('test')
+    # verbosity=2显示每个测试用例的所有相关信息
+    unittest.TextTestRunner(verbosity=2).run(test)
 
 @app.route("/", methods=['GET'])
 def index():

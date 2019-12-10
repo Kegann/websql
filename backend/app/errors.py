@@ -9,3 +9,4 @@ def error_response(status_code, msg=None):
     response = jsonify(payload)
     response.status_code = status_code
     return response
+

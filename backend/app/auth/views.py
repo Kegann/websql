@@ -12,6 +12,10 @@ token_auth = HTTPTokenAuth()
 def get_jwt():
     pass
 
+@auth_bp.app_errorhandler(404)
+def not_found_error(error):
+    return error_response(404)
+
 @auth_bp.route("/", methods=['GET'])
 def test():
     return "AUTH: HELLO WORLD..."
@@ -65,7 +69,7 @@ def register():
         token = user.get_jwt()
         g.current_token = token
         return jsonify({"code": 201, "data": "register succeed!" ,"token":
-                        token})
+                        token}), 201
     except Exception as err:
         return error_response(500, "sth bad happened...")
     return error_response(500, "sth bad happened...")

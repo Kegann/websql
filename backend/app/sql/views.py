@@ -7,6 +7,10 @@ from app.auth.views import token_auth
 from app.models import Sql
 from app.extensions import db
 
+@sql_bp.app_errorhandler(404)
+def not_found_error(error):
+    return error_response(404)
+
 def result_format(header, data):
     res = []
     for i in range(len(data)):
@@ -40,7 +44,7 @@ def query():
             return jsonify({"res":""})
         res = query_carbon(sql_line)
         #print("Response: ", res['data'])
-        return jsonify({"res":res})
+        return jsonify({"code":200, "res":res})
     except Exception as err:
         print ("ERR: ", str(err))
         return error_response(500, str(err))

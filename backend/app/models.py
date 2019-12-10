@@ -35,7 +35,7 @@ class User(db.Model):
             'user_name': self.name,
             'exp': now + timedelta(seconds=expires_in)
         }
-        print("produce: ", payload['exp'])
+        # print("produce: ", payload['exp'])
         return jwt.encode(
             payload,
             current_app.config.get('SECRET_KEY'),
