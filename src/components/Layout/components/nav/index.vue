@@ -8,7 +8,6 @@
     mode="horizontal"
     class="nav-menu"
   >
-    <img src="@/static/ew_logo.png" height="40" class="websql-logo">
     <NavItem v-for="route in permission_routers" :key="route.name" :item="route"
     :basePath="route.path"></NavItem>
     <el-dropdown class="websql-avatar">
